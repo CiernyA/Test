@@ -19,68 +19,6 @@ struct dvere D[26];  //Globálne pole pre všetky dvere
 struct dvere *prvy;
 FILE *f;
 
-#pragma pack(push, 1)
-struct BitmapFileHeader {
-  unsigned short bfType;
-  unsigned long bfSize;
-  unsigned short bfReserved1;
-  unsigned short bfReserved2;
-  unsigned long bfOffBits;
-};
-#pragma pack(pop)
-
-struct BitmapInfoHeader {
-  unsigned long biSize;
-  long int biWidth;
-  long int biHeight;
-  unsigned short biPlanes;
-  unsigned short biBitCount;
-  unsigned long biCompression;
-  unsigned long biSizeImage;
-  long int biXPelsPerMeter;
-  long int biYPelsPerMeter;
-  unsigned long biClrUsed;
-  unsigned long biClrImportant;
-};
-
-void write_head(FILE *img, int width, int height)
-{
-  if (width % 4 != 0 || height % 4 != 0)
-  {
-    printf("Chyba: Vyska a sirka nie su delitelne 4.\n");
-    return;
-  }
-  struct BitmapInfoHeader bih;
-  bih.biSize = sizeof(struct BitmapInfoHeader);
-  bih.biWidth = width;
-  bih.biHeight = height;
-  bih.biSizeImage = bih.biWidth * bih.biHeight * 3;
-  bih.biPlanes = 1;
-  bih.biBitCount = 24;
-  bih.biCompression = 0;
-  bih.biXPelsPerMeter = 0;
-  bih.biYPelsPerMeter = 0;
-  bih.biClrUsed = 0;
-  bih.biClrImportant = 0;
-
-  struct BitmapFileHeader bfh;
-  bfh.bfType = 0x4D42;
-  bfh.bfSize = sizeof(struct BitmapFileHeader) + sizeof(struct BitmapInfoHeader) + bih.biSizeImage;
-  bfh.bfReserved1 = 0;
-  bfh.bfReserved2 = 0;
-  bfh.bfOffBits = sizeof(struct BitmapFileHeader) + bih.biSize;
-
-  fwrite(&bfh, sizeof(struct BitmapFileHeader), 1, img);
-  fwrite(&bih, sizeof(struct BitmapInfoHeader), 1, img);
-}
-
-void write_pixel(FILE *img, unsigned char b, unsigned char g, unsigned char r)
-{
-  fwrite(&r, 1, 1, img);
-  fwrite(&g, 1, 1, img);
-  fwrite(&b, 1, 1, img);
-}
-
 // ------------------------------- VYNULUJ ---------------------------------------
 /*Pomocná funkcia na premazanie prememnných*/
 void vynuluj()
