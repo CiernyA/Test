@@ -1,1 +1,1 @@
-Ked toto prepisem, prepise sa henta hovadina?
+Testovaci repozitar, kde si skusam ako funguje gitFukd 
